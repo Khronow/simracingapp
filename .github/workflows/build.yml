@@ -1,0 +1,26 @@
+name: Compilar APK con Buildozer
+
+on:
+  push:
+    branches: [ main, principal, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Copiar repositorio
+      uses: actions/checkout@v3
+
+    - name: Compilar APK con Buildozer
+      uses: ArtemSBulgakov/buildozer-action@v1
+      id: buildozer
+      with:
+        command: buildozer -v android debug
+
+    - name: Subir APK generado
+      uses: actions/upload-artifact@v4
+      with:
+        name: paquete-apk
+        path: bin/*.apk
+        
