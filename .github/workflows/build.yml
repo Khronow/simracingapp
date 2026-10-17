@@ -12,11 +12,21 @@ jobs:
     - name: Copiar repositorio
       uses: actions/checkout@v4
 
+    - name: Instalar dependencias del sistema
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+            git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config \
+            zlib1g-dev libncurses5-dev libncursesw5-dev libsdl2-dev libsdl2-image-dev \
+            libsdl2-mixer-dev libsdl2-ttf-dev libffi-dev libssl-dev
+
+    - name: Instalar Buildozer y Cython
+      run: |
+        pip3 install --upgrade pip
+        pip3 install Cython==0.29.36 buildozer
+
     - name: Compilar APK con Buildozer
-      uses: ArtemSBulgakov/buildozer-action@v1
-      id: buildozer
-      with:
-        command: buildozer -v android debug
+      run: buildozer -v android debug
 
     - name: Subir APK generado
       uses: actions/upload-artifact@v3
